@@ -8,6 +8,7 @@ paint() - needed to actually draw graphics
 import java.util.ArrayList;
 import java.awt.*;
 import java.awt.image.*;
+
 import javax.swing.*;
 
 public class LegacyDungeonPaintTest extends JPanel implements Runnable
@@ -16,7 +17,7 @@ public class LegacyDungeonPaintTest extends JPanel implements Runnable
     ArrayList<NodeWorld> nodeList;
     ArrayList<Character> visibleCharacters = new ArrayList<Character>();
     static ArrayList<DeadCharacter> recentDeadCharList = new ArrayList<DeadCharacter>();
-    
+    ArrayList<HitNumber> hitNumberList = new ArrayList<HitNumber>();
     DungeonTile[][] tileArray;
     static JFrame window;
     WorldMap world;
@@ -25,6 +26,7 @@ public class LegacyDungeonPaintTest extends JPanel implements Runnable
     //private Timer timer;
     final static int DELAY = 25;
     private Thread animator;
+    
     //PlayerLegacyDungeon superPlayer;
     ImageLoader imageLoader = new ImageLoader();
     BufferedImage tileImage0 = imageLoader.loadImage("Wall.png");
@@ -65,8 +67,8 @@ public class LegacyDungeonPaintTest extends JPanel implements Runnable
     public LegacyDungeonPaintTest() throws InstantiationException, IllegalAccessException
     {
         window = new JFrame("Hazardous Laboratory");
-        //world = new WorldMap();
-        //nodeList = world.getNodeList();
+        world = new WorldMap();
+        nodeList = world.getNodeList();
         dungeon = new DungeonRunner(1,1,1,100,100,1,null);
         tileArray = DungeonRunner.tileList;
         //superPlayer = new PlayerLegacyDungeon();
@@ -124,6 +126,9 @@ public class LegacyDungeonPaintTest extends JPanel implements Runnable
             
                 if (targetTileX  >= 0 && targetTileX < DungeonRunner.xLength && targetTileY >= 0 && targetTileY < DungeonRunner.yLength && game.dungeon.tileList[targetTileX][targetTileY] instanceof DungeonTile && game.dungeon.tileList[targetTileX][targetTileY].character instanceof Character)
                 {
+                    HitNumber temp = new HitNumber(damage, targetTileX, targetTileY);
+                    game.hitNumberList.add(temp);
+                    game.dungeon.tileList[targetTileX][targetTileY].hitNumber = temp;
                     game.dungeon.tileList[targetTileX][targetTileY].character.currentHealth -= damage;
                     game.dungeon.tileList[targetTileX][targetTileY].character.isHit = true;
                     System.out.println(game.dungeon.tileList[targetTileX][targetTileY].character.currentHealth);
@@ -347,6 +352,12 @@ public class LegacyDungeonPaintTest extends JPanel implements Runnable
                if (drawnTile instanceof DungeonTile && drawnTile.character instanceof Character)
                {
                    visibleCharacters.add(drawnTile.character);
+                   if (drawnTile.character instanceof Enemy && (((Enemy)(drawnTile.character)).isActive == false))
+                   {
+                       ((Enemy)(drawnTile.character)).isActive = true;
+                        //Start aim mode, preventing movement here.
+
+                   }
                    if (drawnTile.character instanceof Player)
                    {    
                        
@@ -366,6 +377,7 @@ public class LegacyDungeonPaintTest extends JPanel implements Runnable
                        g.drawImage(playerImage, numTilesX/2 * tileLengthX, numTilesY/2 * tileLengthY, (numTilesX/2 + 1) * tileLengthX, (numTilesY/2 + 1) * tileLengthY, 0, 0, playerImage.getWidth(null), playerImage.getHeight(null), null);
                    }
                    //Draw Jam
+                   
                    else if (drawnTile.character instanceof Jam)
                    {
                        Image slimeImage = null;
@@ -421,8 +433,92 @@ public class LegacyDungeonPaintTest extends JPanel implements Runnable
                        g.drawImage(slimeImage, i * tileLengthX + 25, j * tileLengthY + 25, (i+1) * tileLengthX, (j+1) * tileLengthY, 0, 0, slimeImage.getWidth(null) + 50, slimeImage.getHeight(null) + 100, null);
                    }
                }
+               //Draw damage numbers
+               if(drawnTile instanceof DungeonTile && drawnTile.hitNumber instanceof HitNumber)
+               {
+                   int damageDisplayed = drawnTile.hitNumber.damage;
+                   int numCounter = -2;
+                   int oneDigit = 0;
+               
+                   do
+                   {
+                       if(damageDisplayed > 9)
+                       {
+                           
+                           oneDigit = damageDisplayed % 10;
+                           damageDisplayed /= 10;
+                           numCounter++;
+                       }
+                   
+                       else
+                       {
+                           oneDigit = damageDisplayed;
+                           damageDisplayed = 0;
+                           numCounter++;
+                           }
+                       
+                       //Even more inefficient. More a test.
+                           
+                           if(oneDigit == 0)
+                           {
+                               image = num0;
+                           }
+                           
+                           if(oneDigit == 1)
+                           {
+                               image = num1;
+                           }
+                       
+                           if(oneDigit == 2)
+                           {
+                               image = num2;
+                           }
+                       
+                           if(oneDigit == 3)
+                           {
+                               image = num3;
+                           }
+                           
+                           if(oneDigit == 4)
+                           {
+                               image = num4;
+                           }
+                       
+                           if(oneDigit == 5)
+                           {
+                               image = num5;
+                           }
+                       
+                           if(oneDigit == 6)
+                           {
+                               image = num6;
+                           }
+                       
+                           if(oneDigit == 7)
+                           {
+                               image = num7;
+                           }
+                       
+                           if(oneDigit == 8)
+                           {
+                               image = num8;
+                           }
+                       
+                           if(oneDigit == 9)
+                           {
+                               image = num9;
+                           }
+                           
+                           g.drawImage(image, i * tileLengthX - numCounter * tileLengthX/4, (int)(j * tileLengthY - tileLengthY/2 + tileLengthY * ((double)drawnTile.hitNumber.timer/drawnTile.hitNumber.initialTime)), (int)((i+.25) * tileLengthX - numCounter * tileLengthX/4), (int)((.25+j) * tileLengthY - tileLengthY/2 + tileLengthY * ((double)drawnTile.hitNumber.timer/drawnTile.hitNumber.initialTime)), 0, 0, image.getWidth(null), image.getHeight(null), null);
+                           if (drawnTile.hitNumber.timer <= 0)
+                           {
+                               drawnTile.hitNumber = null;
+                               hitNumberList.remove(drawnTile.hitNumber.timer);
+                           }
+                       }while(damageDisplayed != 0);
+                   }
+               }
            }      
-       }
        
        //Death animations
        for (DeadCharacter i : recentDeadCharList)
@@ -454,8 +550,6 @@ public class LegacyDungeonPaintTest extends JPanel implements Runnable
            }
        }
 
-       
-       
        //UI is drawn last so it's on top of everything else.
        int floorNum = dungeon.currentFloor;
        int numCounter = 0;
@@ -611,6 +705,93 @@ public class LegacyDungeonPaintTest extends JPanel implements Runnable
        g.drawImage(image, 2 * tileLengthX - numCounter * tileLengthX/4, 3 * tileLengthY/4, 9*tileLengthX/4 - numCounter * tileLengthX/4, tileLengthY, 0, 0, image.getWidth(null), image.getHeight(null),(null));
        
        }while(goldNum != 0);
+       
+       /*
+       if(hitNumberList.size() != 0)
+       {
+           for (HitNumber current : hitNumberList)
+           {
+               int damageDisplayed = current.damage;
+               numCounter = 0;
+               oneDigit = 0;
+       
+               do
+               {
+                   if(damageDisplayed > 9)
+                   {
+                   
+                       oneDigit = damageDisplayed % 10;
+                       damageDisplayed /= 10;
+                       numCounter++;
+                   }
+               
+                   else
+                   {
+                       oneDigit = damageDisplayed;
+                       damageDisplayed = 0;
+                       numCounter++;
+                   }
+               
+               //Even more inefficient. More a test.
+                   
+                   if(oneDigit == 0)
+                   {
+                       image = num0;
+                   }
+                   
+                   if(oneDigit == 1)
+                   {
+                       image = num1;
+                   }
+               
+                   if(oneDigit == 2)
+                   {
+                       image = num2;
+                   }
+               
+                   if(oneDigit == 3)
+                   {
+                       image = num3;
+                   }
+                   
+                   if(oneDigit == 4)
+                   {
+                       image = num4;
+                   }
+               
+                   if(oneDigit == 5)
+                   {
+                       image = num5;
+                   }
+               
+                   if(oneDigit == 6)
+                   {
+                       image = num6;
+                   }
+               
+                   if(oneDigit == 7)
+                   {
+                       image = num7;
+                   }
+               
+                   if(oneDigit == 8)
+                   {
+                       image = num8;
+                   }
+               
+                   if(oneDigit == 9)
+                   {
+                       image = num9;
+                   }
+                   
+                   g.drawImage(image, 2 * tileLengthX - numCounter * tileLengthX/4, 3 * tileLengthY/4, 9*tileLengthX/4 - numCounter * tileLengthX/4, tileLengthY, 0, 0, image.getWidth(null), image.getHeight(null),(null));
+                   if (current.timer <= 0)
+                   {
+                       hitNumberList.remove(current);
+                   }
+               }while(damageDisplayed != 0);
+           }
+       }
        //g.drawImage(tileImage0, numTilesX/2 * tileLengthX, numTilesY/2 * tileLengthY, (numTilesX+1)/2 * tileLengthX, (numTilesY+1)/2 * tileLengthY, 0, 0, tileImage0.getWidth(null), tileImage0.getHeight(null), null);
       /*
       if(true)
@@ -695,6 +876,15 @@ public class LegacyDungeonPaintTest extends JPanel implements Runnable
                 for(DeadCharacter j : recentDeadCharList)
                 {
                     j.deathTimer--;
+                    //Removal takes place in paint.
+                }
+            }
+            
+            if(hitNumberList.size() != 0)
+            {
+                for(HitNumber j : hitNumberList)
+                {
+                    j.timer--;
                 }
             }
         }

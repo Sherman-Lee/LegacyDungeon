@@ -31,7 +31,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import javax.swing.*;
-import java.awt.Color;
 public class TestGame extends JPanel
 {
 	ArrayList<NodeWorld> nodeList;
@@ -39,7 +38,6 @@ public class TestGame extends JPanel
 	WorldMap world;
 	static int turnCounter = 0;
 	MaxAreaPolygon maxAreaPolygon;//test
-	static int meow = 1;
 	public TestGame()
 	{
 		window = new JFrame("I'm a poopoo");
@@ -54,7 +52,7 @@ public class TestGame extends JPanel
 		TestGame game = new TestGame();
 		createWindow();
 		window.add(game);
-		for(int i = 0; i < 10000; i++)
+		while(true)
 		{
 			game.repaint();
 		}
@@ -96,19 +94,16 @@ public class TestGame extends JPanel
 		//Graphics2D g2 = (Graphics2D) g;
 		//Border lineborder = 
 		//g.setStroke(new BasicStroke(10));
-		Color bullshit = new Color(0.3f, 0.6f, 1.0f, 0.5f);
-		//needs to type in "f" right after the numbers to convert double to float.
-		g.setColor(bullshit);
-		//testSTART
-		//testEND
+		g.setColor(Color.red);
 		if(true)
 		{
 			g.drawImage(world.map, 0, 0, (int)(screenRes.getWidth()/2),(int)(screenRes.getWidth()/2.2),null);
 		}
 		for(int i = 0; i < nodeList.size(); i++)
 		{
-			g.drawImage(nodeList.get(i).nodeImage,nodeList.get(i).x-10,nodeList.get(i).y-10,20,20,null);
+			g.drawImage(nodeList.get(i).nodeImage,nodeList.get(i).x,nodeList.get(i).y,20,20,null);
 		}
+		//testSTART
 		ArrayList<NodeWorld> validList = new ArrayList<NodeWorld>();
 		for(int i = 0; i < nodeList.size(); i++)
 		{
@@ -119,12 +114,9 @@ public class TestGame extends JPanel
 		}
 		if(validList.size() >= 3)
 		{
-			g.fillPolygon(maxAreaPolygon.makePolygon(validList));
-			for(int i = 0; i < MaxAreaPolygon.vertexList.size(); i++)
-			{
-				g.drawImage(world.numImage[i], MaxAreaPolygon.vertexList.get(i).x, MaxAreaPolygon.vertexList.get(i).y-20, 20, 20, null);
-			}
+			g.drawPolygon(maxAreaPolygon.makePolygon(validList));
 			//don't declare the method every time. Only update the polygon every time a new defense node is added. Otherwise draw same polygon.
 		}
+		//testEND
 	}
 }

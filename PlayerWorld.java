@@ -1,3 +1,5 @@
+import java.awt.Image;
+
 public class PlayerWorld
 {
 	//Fields
