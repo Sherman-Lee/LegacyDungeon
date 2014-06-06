@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.awt.*;//includes Color, Dimension, Graphics, etc.
+import java.awt.image.BufferedImage;
+
 import javax.swing.*;//part of UI, includes JPanel
 // Used for input and actions
 public class Player extends Character{
@@ -88,6 +90,19 @@ public class Player extends Character{
         
     
     }
+    
+    public BufferedImage getImage()
+    {
+        switch(this.direction)
+        {
+            case 0: return LegacyDungeonPaintTest.playerImageEast;
+            case 1: return LegacyDungeonPaintTest.playerImageNorth;
+            case 2: return LegacyDungeonPaintTest.playerImageWest;
+            case 3: return LegacyDungeonPaintTest.playerImageSouth;
+            default: return LegacyDungeonPaintTest.playerImageEast;
+        }
+    }
+    
         
    static public void main(String[] args)
     {

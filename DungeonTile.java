@@ -16,7 +16,7 @@ public class DungeonTile
     public BufferedImage itemImage;
     public BufferedImage charImage;
     ImageLoader imageLoader;
-    HitNumber hitNumber = null;
+    Number number = null;
     
     
     //Test for improvement for generation
