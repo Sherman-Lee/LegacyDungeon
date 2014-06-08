@@ -60,9 +60,9 @@ public class Jam extends Enemy
         }
     }
     
-    public void act(DungeonRunner dungeon)
+    public void act(LegacyDungeonPaintTest lDungeon)
     {
         //Picks random spot to go to. Including walls.
-        AIRandom(dungeon);
+        AIRandom(lDungeon);
     }
 }

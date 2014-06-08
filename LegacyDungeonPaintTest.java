@@ -92,7 +92,7 @@ public class LegacyDungeonPaintTest extends JPanel implements Runnable
     BufferedImage num9G = imageLoader.loadImage("9G.png");
     BufferedImage plusG = imageLoader.loadImage("PlusG.png");
     BufferedImage minus = imageLoader.loadImage("Minus.png");
-    
+    public static boolean isEnemyTurn = false;
         
     public LegacyDungeonPaintTest() throws InstantiationException, IllegalAccessException
     {
@@ -104,6 +104,7 @@ public class LegacyDungeonPaintTest extends JPanel implements Runnable
         //superPlayer = new PlayerLegacyDungeon();
 
     }
+    
     public static void main(String[] args) throws InstantiationException, IllegalAccessException, InterruptedException
     {
         LegacyDungeonPaintTest game = new LegacyDungeonPaintTest();
@@ -113,140 +114,40 @@ public class LegacyDungeonPaintTest extends JPanel implements Runnable
         //Changes to true when something needs to be repainted.
        // boolean isChange = true;
         boolean inGame = true;
-        boolean isEnemyTurn = false;
         //game.repaint();
         
         
         while (inGame)
         {
+            //Player actions
             if (KeyboardInput.boolIsMoving == true)
             {
-                System.out.println("Moving");
-                game.dungeon.playerCharacter.charMove(game.dungeon.playerCharacter.playerMoveX(), game.dungeon.playerCharacter.playerMoveY(), game.dungeon.playerCharacter, game.dungeon);
-                //isChange = true;
-                System.out.println(game.dungeon.playerCharacter.currentTile);
-                KeyboardInput.boolIsMoving = false;
-                isEnemyTurn = true;
-                
-                //game.tileArray = DungeonRunner.tileList;
+                game.dungeon.playerCharacter.move(game);
             }
-            //Probably a better way to do this but oh well
             if (KeyboardInput.boolIsAttack == true)
             {
-                KeyboardInput.boolIsAttack = false;
-                isEnemyTurn = true;
-                //isChange = true;
-                System.out.println("punch him!");
-                int damage = (int) (2 * Math.random()) + 1;
-                int targetTileX = game.dungeon.playerCharacter.currentTile.x;
-                int targetTileY = game.dungeon.playerCharacter.currentTile.y;
-            
-                switch(game.dungeon.playerCharacter.direction)
-                {
-                    case 0: targetTileX += 1;
-                        break;
-                    case 1: targetTileY -= 1;
-                        break;
-                    case 2: targetTileX -= 1;
-                        break;
-                    case 3: targetTileY += 1;
-                        break;
-                    default: targetTileX += 1;
-                }
-            
-                if (targetTileX  >= 0 && targetTileX < DungeonRunner.xLength && targetTileY >= 0 && targetTileY < DungeonRunner.yLength && game.dungeon.tileList[targetTileX][targetTileY] instanceof DungeonTile && game.dungeon.tileList[targetTileX][targetTileY].character instanceof Character)
-                {
-                    HitNumber temp = new HitNumber(damage, targetTileX, targetTileY);
-                    game.NumberList.add(temp);
-                    game.dungeon.tileList[targetTileX][targetTileY].number = temp;
-                    game.dungeon.tileList[targetTileX][targetTileY].character.currentHealth -= damage;
-                    game.dungeon.tileList[targetTileX][targetTileY].character.isHit = true;
-                    System.out.println(game.dungeon.tileList[targetTileX][targetTileY].character.currentHealth);
-                    if(game.dungeon.tileList[targetTileX][targetTileY].character.currentHealth <= 0)
-                    {
-                        if(game.dungeon.tileList[targetTileX][targetTileY].character instanceof Jam)
-                        {
-                            ((Jam)(game.dungeon.tileList[targetTileX][targetTileY].character)).onDeath();        
-                        }
-                        
-                        
-                    }
-                }
+                game.dungeon.playerCharacter.attack(game);
             }
-
+            
             if(KeyboardInput.boolIsInteracting == true)
             {
-                if (game.dungeon.playerCharacter.currentTile.itemID != 0)
-                {
-                    if (game.dungeon.playerCharacter.currentTile.itemID == 1)
-                    {
-                        System.out.println("MOENEY");
-                        game.dungeon.playerCharacter.goldAmount += game.dungeon.playerCharacter.currentTile.goldAmount;
-                        //game.superPlayer.goldCount += game.dungeon.playerCharacter.currentTile.goldAmount;
-                        //THIS LINE MUST CHANGE THE VALUE IN TILEARRAY FROM LDungeon. ACCESSING SAME MEMORY?
-                        GoldNumber temp = new GoldNumber(game.dungeon.playerCharacter.currentTile.goldAmount, game.dungeon.playerCharacter.currentTile.x, game.dungeon.playerCharacter.currentTile.y);
-                        game.NumberList.add(temp);
-                        game.dungeon.tileList[game.dungeon.playerCharacter.currentTile.x][game.dungeon.playerCharacter.currentTile.y].number = temp;
-                        game.dungeon.playerCharacter.currentTile.itemID = 0;
-                        game.dungeon.tileList[game.dungeon.playerCharacter.currentTile.x][game.dungeon.playerCharacter.currentTile.y].itemID = 0;
-                        //isChange = true;
-
-                            
-                    }
-                    
-                    if (game.dungeon.playerCharacter.currentTile.itemID == 2)
-                    {
-                        System.out.println("");
-                    }
-                        //game.tileArray = DungeonRunner.tileList;
-                }
-                
-                if(game.dungeon.playerCharacter.currentTile.tileID == 2)
-                {
-                    System.out.println("NEXT LEVEL");
-                    //game.superPlayer.goldCount = game.dungeon.playerCharacter.riches;
-                    game.dungeon.currentFloor++;                    
-                    game.dungeon = new DungeonRunner(1,1,1,100,100,game.dungeon.currentFloor, game.dungeon.playerCharacter);
-                    game.tileArray = DungeonRunner.tileList;
-                    //isChange = true;
-                    
-                    //If this is the last floor, we export stuff from player and set ingame to false;
-                    /*
-                    if game.dungeon.currentFloor > game.numFloors
-                    {
-                        game.playerData = game.dungeon.playerCharacter;
-                        inGame = false;
-                    }
-*/
-                }
-                
-                
-                
-                System.out.println("Interacting woah");
-                KeyboardInput.boolIsInteracting = false; 
+                game.dungeon.playerCharacter.interact(game);
             }
             
+            //Enemy actions
             while(isEnemyTurn)
             {
                 for (Enemy i: game.dungeon.enemyList)
                 {
                     if(i instanceof Jam && ((Jam)i).isActive == true)
                     {
-                        ((Jam)i).act(game.dungeon);  
-                        //game.repaint();
+                        ((Jam)i).act(game);  
                     }   
                     
                     //else if other stuff
                 isEnemyTurn = false;
                 }
-            }
-            /*
-            while(isChange)
-            {
-                //game.revalidate();
-                //game.repaint();
-                isChange = false;
-            } */         
+            }       
         }
     }
         //Insert what you need to test here

@@ -135,7 +135,24 @@ public abstract class Character extends JFrame
         //Remnant on Tile
     }
     
-    public void AIRandom(DungeonRunner dungeonInput)
+    public void dealDamage(int damage, int targetX, int targetY, LegacyDungeonPaintTest lDungeon)
+    {
+        HitNumber temp = new HitNumber(damage, targetX, targetY);
+        LegacyDungeonPaintTest.NumberList.add(temp);
+        lDungeon.dungeon.tileList[targetX][targetY].number = temp;
+        lDungeon.dungeon.tileList[targetX][targetY].character.currentHealth -= damage;
+        lDungeon.dungeon.tileList[targetX][targetY].character.isHit = true;
+        //System.out.println(LegacyDungeonPaintTest.dungeon.tileList[targetTileX][targetTileY].character.currentHealth);
+        if(lDungeon.dungeon.tileList[targetX][targetY].character.currentHealth <= 0)
+        {
+            if(lDungeon.dungeon.tileList[targetX][targetY].character instanceof Jam)
+            {
+                ((Jam)(lDungeon.dungeon.tileList[targetX][targetY].character)).onDeath();        
+            }        
+        }
+    }
+    
+    public void AIRandom(LegacyDungeonPaintTest lDungeon)
     {
         //Picks random spot to go to. Including walls.
         double directionChoice = Math.random();
@@ -160,19 +177,19 @@ public abstract class Character extends JFrame
             deltaY = -1;
         }
         
-        charMove(deltaX, deltaY, this, dungeonInput);
+        charMove(deltaX, deltaY, this, lDungeon.dungeon);
     }
     
     //Player can be replaced by an input target if allies become viable.
-    public void AIAggressiveSemiRandom(DungeonRunner dungeonInput)
+    public void AIAggressiveSemiRandom(LegacyDungeonPaintTest lDungeon)
     {
         //Attack player if in range.
-        if (Math.abs(this.currentTile.x - dungeonInput.playerCharacter.currentTile.x) == 1 && Math.abs(this.currentTile.y - dungeonInput.playerCharacter.currentTile.y) == 1 )
+        if (Math.abs(this.currentTile.x - lDungeon.dungeon.playerCharacter.currentTile.x) == 1 && Math.abs(this.currentTile.y - lDungeon.dungeon.playerCharacter.currentTile.y) == 1 )
         {
             System.out.println("punched!");
             int damage = (int) (2 * Math.random()) + 1;
-            int targetTileX = dungeonInput.playerCharacter.currentTile.x;
-            int targetTileY = dungeonInput.playerCharacter.currentTile.y;
+            int targetTileX = lDungeon.dungeon.playerCharacter.currentTile.x;
+            int targetTileY = lDungeon.dungeon.playerCharacter.currentTile.y;
             
             //Set direction of this creature
             //East
@@ -219,20 +236,8 @@ public abstract class Character extends JFrame
                 this.direction = 7;
             }
             
-            HitNumber temp = new HitNumber(damage, targetTileX, targetTileY);
-            LegacyDungeonPaintTest.NumberList.add(temp);
-            dungeonInput.tileList[targetTileX][targetTileY].number = temp;
-            dungeonInput.tileList[targetTileX][targetTileY].character.currentHealth -= damage;
-            dungeonInput.tileList[targetTileX][targetTileY].character.isHit = true;
-            //System.out.println(LegacyDungeonPaintTest.dungeon.tileList[targetTileX][targetTileY].character.currentHealth);
-            if(dungeonInput.tileList[targetTileX][targetTileY].character.currentHealth <= 0)
-            {
-                if(dungeonInput.tileList[targetTileX][targetTileY].character instanceof Jam)
-                {
-                    ((Jam)(dungeonInput.tileList[targetTileX][targetTileY].character)).onDeath();        
-                }        
-            }
-            }
+            dealDamage(damage, targetTileX, targetTileY, lDungeon);
+        }
 
         
         //Pursue target
@@ -244,7 +249,7 @@ public abstract class Character extends JFrame
             //Get closer in x axis.
             if(directionChoice < .40)
             {
-                int temp = dungeonInput.playerCharacter.currentTile.x - this.currentTile.x;
+                int temp = lDungeon.dungeon.playerCharacter.currentTile.x - this.currentTile.x;
                 //If the player is further to the right, then go right.
                 if (temp > 0)
                 {
@@ -266,7 +271,7 @@ public abstract class Character extends JFrame
             
             else if(directionChoice < .80)
             {
-                int temp = dungeonInput.playerCharacter.currentTile.y - this.currentTile.y;
+                int temp = lDungeon.dungeon.playerCharacter.currentTile.y - this.currentTile.y;
                 //If the player is further to the right, then go right.
                 if (temp > 0)
                 {
@@ -303,7 +308,7 @@ public abstract class Character extends JFrame
                 deltaX = 1;
             }
             
-            charMove(deltaX, deltaY, this, dungeonInput);
+            charMove(deltaX, deltaY, this, lDungeon.dungeon);
         }
     }
     
