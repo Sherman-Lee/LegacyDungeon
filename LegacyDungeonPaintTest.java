@@ -20,7 +20,7 @@ public class LegacyDungeonPaintTest extends JPanel implements Runnable
     ArrayList<Enemy> activeEnemyList = new ArrayList<Enemy>();
     static ArrayList<Number> NumberList = new ArrayList<Number>();
     DungeonTile[][] tileArray;
-    static JFrame window;
+    //static JFrame window;
     WorldMap world;
     static int turnCounter = 0;
     DungeonRunner dungeon;    
