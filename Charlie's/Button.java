@@ -35,7 +35,7 @@ public class Button extends JComponent implements MouseListener
 		this.y = y;
 		this.height = height;
 		this.length = length;
-		setBounds(x, y, length, height);
+		setBounds(x, y, length+100, height+100);
 		addMouseListener(this);	
 	}
 	

@@ -11,7 +11,7 @@ import java.awt.image.*;
 
 import javax.swing.*;
 
-public class LegacyDungeonPaintTest extends JPanel implements Runnable
+public class dungeonMain extends JPanel implements Runnable
 {
     static Dimension screenRes = Toolkit.getDefaultToolkit().getScreenSize();//gets size of screen
     ArrayList<NodeWorld> nodeList;
@@ -94,7 +94,7 @@ public class LegacyDungeonPaintTest extends JPanel implements Runnable
     BufferedImage minus = imageLoader.loadImage("Minus.png");
     public static boolean isEnemyTurn = false;
         
-    public LegacyDungeonPaintTest() throws InstantiationException, IllegalAccessException
+    public dungeonMain() throws InstantiationException, IllegalAccessException
     {
         window = new JFrame("Hazardous Laboratory");
         world = new WorldMap();
