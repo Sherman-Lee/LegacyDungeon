@@ -1,3 +1,17 @@
+/*Word filter, remove only 
+Mass
+MAss 
+mAss <=
+mASS <=
+maSS
+MYAss
+myAss
+MyAss
+MYASS
+MYAS
+
+GOFUCKYOU
+myass*/
 //NOTE: The current plan is to make ONLY camera movement run in the main runner. Everything else is dependent on AnimatedImages.java. If it turns out AnimatedImages is less efficient, then we shall either make AnimatedImages a single thread (and test that) or return to main.
 
 //WHAT IT DOES: It creates a component that runs an animation. This animation is very light in terms of CPU usage, and does not interact with the player. It's useful in that it makes the screen look alive and nice, even when the main thread is asleep (which will be often).

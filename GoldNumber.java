@@ -1,4 +1,5 @@
 //Perhaps unneeded?
+//I agree, very unneeded.
 public class GoldNumber extends Number{
 
 

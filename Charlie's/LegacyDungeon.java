@@ -23,11 +23,8 @@ public class LegacyDungeon extends JPanel
 	static boolean inDungeon;	
 	static LegacyDungeon game;
 	//Copy pastad from LDPT
-	
-
 	/*menu related variables*/
 	static Button button;
-
 	/*world map related variables*/
 	static Button OKButton;
 	static boolean message1;
@@ -39,8 +36,7 @@ public class LegacyDungeon extends JPanel
 	static float XFactor;//opacity of force field
 	Polygon thePolygon;
 
-	/*in dungeon related variables*/
-	
+	/*in dungeon related variables*/	
 	public LegacyDungeon()
 	{
 		window = new Window();//creates a window object, which generates the window
@@ -55,7 +51,6 @@ public class LegacyDungeon extends JPanel
 		game = new LegacyDungeon();
 		Window.createWindow();//creates window
 		Window.window.add(game);//adds game file to the window
-
 		while(running)
 		{
 			loadMenu();//loads menu screen
@@ -161,16 +156,16 @@ createWorld(int turn), takes the current turn #, adjusts difficulty of newly gen
 	public static void loadDungeon(boolean inDungeon)
 	{
 		musicPlayer.stop();
-		musicPlayer.playMusic("sounds/Worldmap2.wav");
+		//musicPlayer.playMusic("sounds/chaos.wav");
 		if(inDungeon)
 		{
 			System.out.println("You're in the dungeon!");
-			/*
+/*
 			try
 			{
 				//dungeonMain runDungeon = new dungeonMain();
 				//runDungeon.main(new String[1]);
-				inWorldMap = false;
+				//inWorldMap = false;
 				//Window.window.remove(game);
 				//runDungeon.runThisMofo();
 				//System.out.println("yea");
@@ -188,8 +183,9 @@ createWorld(int turn), takes the current turn #, adjusts difficulty of newly gen
 			catch(InterruptedException e)
 			{
 				System.out.println("interrupt");
-			}
-			*/
+			}	
+		}
+	*/
 		}
 	}
 /*////////////////////////////////////////////////////////Method 4: paintComponent does the painting. According to Java, everything we want to paint should be placed in this method. Making something alternate between visibility requires the use of ArrayLists, if statements, etc. For example, if we want to spawn enemies, we'll have paintComponent paint images of an ArrayList. When a new enemy is spawned, our ArrayList grows, which results in the new enemy being painted every time we call repaint().*/
