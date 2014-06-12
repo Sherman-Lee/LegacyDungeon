@@ -160,12 +160,11 @@ createWorld(int turn), takes the current turn #, adjusts difficulty of newly gen
 		if(inDungeon)
 		{
 			System.out.println("You're in the dungeon!");
-/*
 			try
 			{
-				//dungeonMain runDungeon = new dungeonMain();
-				//runDungeon.main(new String[1]);
-				//inWorldMap = false;
+				dungeonMain runDungeon = new dungeonMain();
+				runDungeon.main(new String[1]);
+				inWorldMap = false;
 				//Window.window.remove(game);
 				//runDungeon.runThisMofo();
 				//System.out.println("yea");
@@ -184,8 +183,6 @@ createWorld(int turn), takes the current turn #, adjusts difficulty of newly gen
 			{
 				System.out.println("interrupt");
 			}	
-		}
-	*/
 		}
 	}
 /*////////////////////////////////////////////////////////Method 4: paintComponent does the painting. According to Java, everything we want to paint should be placed in this method. Making something alternate between visibility requires the use of ArrayLists, if statements, etc. For example, if we want to spawn enemies, we'll have paintComponent paint images of an ArrayList. When a new enemy is spawned, our ArrayList grows, which results in the new enemy being painted every time we call repaint().*/
