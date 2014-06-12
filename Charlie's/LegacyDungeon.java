@@ -10,8 +10,12 @@ import java.awt.Polygon;
 
 public class LegacyDungeon extends JPanel
 {
-	/*variables that'll be used everywhere*/
-	static musicPlayer musicPlayer = new musicPlayer();//musicPlayer class plays music
+	/*variables used everywhere*/
+	
+	static musicPlayer musicPlayer = new musicPlayer();//This object plays sounds and music
+	/*variables used in menu*/
+	/*variables used in map*/
+	/*variables used in dungeon*/
 	static Menu menu;
 	static Window window;
 	static WorldMap world;
@@ -130,11 +134,11 @@ createWorld(int turn), takes the current turn #, adjusts difficulty of newly gen
 		//Else, continue on normally
 		while(inWorldMap)
 		{
-			if(OKButton.clicked)
-				message1 = false;
+		//	if(OKButton.clicked)
+			//	message1 = false;
 			world.nodeDetector();
 			game.repaint();
-			try
+			/*try
 			{
 				Thread.sleep(1000);
 				if(inDungeon)
@@ -148,15 +152,18 @@ createWorld(int turn), takes the current turn #, adjusts difficulty of newly gen
 			//if the player selects yes, turnCounter++; inWorldMap = false; this method ends by returning true;
 			//if the player selects no, move player back to original position, wait for response
             //SOMETHING HERE. I MIGHT BE MISSING SOMETHING. I FEEL LIKE I'M MISSING SOMETHING. THIS NOTE SHOULD BE KEPT UNTIL WE FIND THE MISSING COMPONENT.
+			*/
         }
         return false;
     }
 
 /*////////////////////////////////////////////////////////Method 3: Creating, loading, and updating Dungeon*/
+
 	public static void loadDungeon(boolean inDungeon)
 	{
-		musicPlayer.stop();
+		//musicPlayer.stop();
 		//musicPlayer.playMusic("sounds/chaos.wav");
+		/*
 		if(inDungeon)
 		{
 			System.out.println("You're in the dungeon!");
@@ -184,6 +191,7 @@ createWorld(int turn), takes the current turn #, adjusts difficulty of newly gen
 				System.out.println("interrupt");
 			}	
 		}
+		*/
 	}
 /*////////////////////////////////////////////////////////Method 4: paintComponent does the painting. According to Java, everything we want to paint should be placed in this method. Making something alternate between visibility requires the use of ArrayLists, if statements, etc. For example, if we want to spawn enemies, we'll have paintComponent paint images of an ArrayList. When a new enemy is spawned, our ArrayList grows, which results in the new enemy being painted every time we call repaint().*/
     @Override

@@ -107,7 +107,7 @@ public class dungeonMain extends JPanel implements Runnable
     
     public static void main(String[] args) throws InstantiationException, IllegalAccessException, InterruptedException
     {
-        LegacyDungeonPaintTest game = new LegacyDungeonPaintTest();
+        dungeonMain game = new dungeonMain();
         createWindow();
         window.add(game);
         
